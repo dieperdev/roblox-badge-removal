@@ -77,7 +77,6 @@ def main() -> None:
         badge_id = badge['id']
 
         r = s.delete(f'https://badges.roblox.com/v1/user/badges/{badge_id}')
-        content = r.text
 
         if r.status_code == 200:
             deleted_badges_count += 1
