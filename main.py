@@ -48,6 +48,8 @@ def main() -> None:
 
             # Checks if the game the badge was awarded from is exempt from badge removal
             if str(badge_data['gameID']) in exempt_games:
+                print(f'Badge ID #{badge_data['badge_id']} was exempt from badge removal.')
+
                 continue
 
             # Checks if the name or description of the badge is exempt from badge removal based on keywords
@@ -56,6 +58,8 @@ def main() -> None:
                     found_match = True
 
             if found_match:
+                print(f'Badge ID #{badge_data['badge_id']} was exempt from badge removal.')
+
                 continue
 
             badge_ids.append(badge_data)
