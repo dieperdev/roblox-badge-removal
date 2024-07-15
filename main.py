@@ -10,6 +10,7 @@ load_dotenv()
 roblox_token = os.environ.get('ROBLOSECURITY')
 user_id = os.environ.get('USERID')
 exempt_games = os.environ.get('GAMES_EXEMPT').split(',')
+exempt_keywords = os.environ.get('KEYWORDS_EXEMPT').split(',')
 
 if not roblox_token or not user_id:
     print('All environment variables must be entered.')
@@ -36,15 +37,28 @@ def main() -> None:
         cursor = content['nextPageCursor'] or None
 
         for badge in data:
+            found_match = False
+
             badge_data = {
                 'id': badge['id'],
                 'name': badge['name'],
+                'description': badge['description'],
                 'gameID': badge['awarder']['id']
             }
 
             # Checks if the game the badge was awarded from is exempt from badge removal
-            if not str(badge_data['gameID']) in exempt_games:
-                badge_ids.append(badge_data)
+            if str(badge_data['gameID']) in exempt_games:
+                continue
+
+            # Checks if the name or description of the badge is exempt from badge removal based on keywords
+            for word in exempt_keywords:
+                if word in badge_data['name'] or word in badge_data['description']:
+                    found_match = True
+
+            if found_match:
+                continue
+
+            badge_ids.append(badge_data)
 
         page += 1
 
