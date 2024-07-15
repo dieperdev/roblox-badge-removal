@@ -4,7 +4,7 @@
 
 ## Features:
 - [x] Game exemption
-- [ ] Keyword exemption
+- [x] Keyword exemption
 
 ## Installation
 1. Clone the repo `git clone https://github.com/dieperdev/roblox-badge-removal.git`
