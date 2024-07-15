@@ -18,6 +18,12 @@ if not roblox_token or not user_id:
 
 def main() -> None:
     s = requests.Session()
+    # Set roblosecurity token
+    s.cookies['.ROBLOSECURITY'] = roblox_token
+
+    # Add CSRF token to actually make the request work. See https://stackoverflow.com/a/69855008 .
+    header = s.post('https://catalog.roblox.com/')
+    s.headers['X-CSRF-TOKEN'] = header.headers['X-CSRF-TOKEN']
 
     cursor = ''
     page = 0
@@ -47,7 +53,26 @@ def main() -> None:
         if not cursor:
             break
 
-    print(f'Total badges found: {len(badge_ids)}')
+    total_badges = len(badge_ids)
+    deleted_badges_count = 0
+
+    print(f'Total badges found: {total_badges}')
+    print('Deleting badges...')
+
+    for badge in badge_ids:
+        badge_id = badge['id']
+
+        r = s.delete(f'https://badges.roblox.com/v1/user/badges/{badge_id}')
+        content = r.text
+
+        if r.status_code == 200:
+            deleted_badges_count += 1
+
+            print(f'Deleted Badge ID #{badge_id}. Total badges deleted: {deleted_badges_count}. {(total_badges - deleted_badges_count):,} badges remain.')
+        else:
+            print(f'Something went wrong deleting Badge ID #{badge_id}. Open a github issue and include json content of the request above.')
+
+    print(f'Deleted badges. {total_badges - deleted_badges_count} badges remain.')
 
 if __name__ == '__main__':
     main()
