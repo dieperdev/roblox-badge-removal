@@ -36,7 +36,9 @@ def main() -> None:
                 'gameID': badge['awarder']['id']
             }
 
-            badge_ids.append(badge_data)
+            # Checks if the game the badge was awarded from is exempt from badge removal
+            if not str(badge_data['gameID']) in exempt_games:
+                badge_ids.append(badge_data)
 
         page += 1
 
