@@ -54,8 +54,11 @@ def main() -> None:
 
             # Checks if the name or description of the badge is exempt from badge removal based on keywords
             for word in exempt_keywords:
-                if word in badge_data['name'] or word in badge_data['description']:
+                if word.lower() in badge_data['name'].lower() or word.lower() in badge_data['description'].lower():
+                    # Exit loop early because checking other words isn't needed
                     found_match = True
+
+                    break
 
             if found_match:
                 print(f'Badge ID #{badge_data['id']} was exempt from badge removal.')
