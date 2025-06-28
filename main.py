@@ -22,8 +22,8 @@ def main() -> None:
     # Set roblosecurity token
     s.cookies['.ROBLOSECURITY'] = roblox_token
 
-    # Add CSRF token to actually make the request work. See https://stackoverflow.com/a/69855008 .
-    header = s.post('https://catalog.roblox.com/')
+    # Add CSRF token to actually make the request work. The old method is outdated: https://stackoverflow.com/a/69855008 .
+    header = s.post('https://catalog.roblox.com/v1/topic/get-topics')
     s.headers['X-CSRF-TOKEN'] = header.headers['X-CSRF-TOKEN']
 
     cursor = ''
